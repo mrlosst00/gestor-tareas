@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Confirmar Borrado{% endblock %}
+
+{% block content %}
+  <h1>¿Estás seguro?</h1>
+  <hr>
+  <p>Estás a punto de borrar permanentemente la tarea: <strong>"{{ task.title }}"</strong></p>
+
+  <form method="POST">
+    {% csrf_token %}
+
+    <a href="{% url 'tasks:project-detail' project.pk %}" class="btn btn-secondary">Cancelar</a>
+    <button type-"submit" class="btn btn-danger">Sí, borrar</button>
+  </form>
+
+{% endblock %}

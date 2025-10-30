@@ -3,7 +3,9 @@
 {% block title %}Nueva Tarea{% endblock %}
 
 {% block content %}
-  <h3>Crear Nueva Tarea para: {{ project.name }}</h3>
+{% if task %} <h3>Editar Tarea: {{ task.title }}</h3>
+{% else %} <h3>Crear Nueva Tarea para: {{ project.name }}</h3>
+{% endif %}
   <hr>
 
   <form method="POST">

@@ -11,4 +11,6 @@ urlpatterns = [
     # --- AÑADE ESTA LÍNEA ---
     # La URL será algo como /proyecto/1/nueva-tarea/
     path('proyecto/<int:project_pk>/nueva-tarea/', views.task_create, name='task-create'),
+    path('proyecto/<int:project_pk>/tarea/<int:task_pk>/editar/', views.task_update, name='task-update'),
+    path('proyecto/<int:project_pk>/tarea/<int:task_pk>/borrar/', views.task_delete, name='task-delete'),
 ]
