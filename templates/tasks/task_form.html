@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Nueva Tarea{% endblock %}
+
+{% block content %}
+  <h3>Crear Nueva Tarea para: {{ project.name }}</h3>
+  <hr>
+
+  <form method="POST">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label for="id_title" class="form-label">Título:</label>
+        <input type="text" name="title" id="id_title" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label for="id_status" class="form-label">Estado:</label>
+        <select name="status" id="id_status" class="form-select">
+            <option value="PENDING" selected>Pendiente</option>
+            <option value="IN_PROGRESS">En Progreso</option>
+            <option value="COMPLETED">Completada</option>
+        </select>
+    </div>
+
+    <button type="submit" id="submit-button" class="btn btn-primary">Guardar Tarea</button>
+    <a href="{% url 'tasks:project-detail' project.pk %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+
+{% endblock %}
+
+
+{% block javascript %}
+<script>
+  // Esperamos a que todo el HTML esté cargado
+  document.addEventListener('DOMContentLoaded', function() {
+
+    // 1. Seleccionamos los elementos del DOM
+    const titleInput = document.getElementById('id_title');
+    const submitButton = document.getElementById('submit-button');
+
+    // 2. Función para comprobar la validación
+    function validateForm() {
+      // .trim() quita espacios en blanco al inicio y al final
+      const titleValue = titleInput.value.trim();
+
+      if (titleValue.length > 0) {
+        submitButton.disabled = false; // Habilita el botón
+        submitButton.innerText = "Guardar Tarea";
+      } else {
+        submitButton.disabled = true; // Deshabilita el botón
+        submitButton.innerText = "Escribe un título...";
+      }
+    }
+
+    // 3. Validamos al cargar la página (estará vacío)
+    validateForm();
+
+    // 4. Añadimos un 'escuchador' que llama a validateForm CADA VEZ que el usuario teclea
+    titleInput.addEventListener('keyup', validateForm);
+
+  });
+</script>
+{% endblock %}

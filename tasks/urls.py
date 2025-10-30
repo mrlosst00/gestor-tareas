@@ -5,9 +5,10 @@ from . import views # Importa las vistas de la app
 app_name = 'tasks'
 
 urlpatterns = [
-    # URL para la lista de proyectos: /
     path('', views.project_list, name='project-list'),
-
-    # URL para el detalle: /proyecto/1/ (el <int:pk> es un parámetro dinámico)
     path('proyecto/<int:pk>/', views.project_detail, name='project-detail'),
+
+    # --- AÑADE ESTA LÍNEA ---
+    # La URL será algo como /proyecto/1/nueva-tarea/
+    path('proyecto/<int:project_pk>/nueva-tarea/', views.task_create, name='task-create'),
 ]

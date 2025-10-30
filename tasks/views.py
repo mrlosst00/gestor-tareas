@@ -1,5 +1,6 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Project, Task # Importamos nuestros modelos
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Project, Task 
+from .forms import TaskForm # Importamos nuestros modelos
 
 # Vista para mostrar la lista de TODOS los proyectos
 def project_list(request):
@@ -23,3 +24,36 @@ def project_detail(request, pk):
         'project': project
     }
     return render(request, 'tasks/project_detail.html', context)
+
+def task_create(request, project_pk):
+    # Primero, obtenemos el proyecto al que pertenecerá esta tarea
+    project = get_object_or_404(Project, pk=project_pk)
+
+    # Comprobamos si el formulario se está enviando (POST)
+    if request.method == 'POST':
+        form = TaskForm(request.POST) # Llenamos el formulario con los datos enviados
+
+        if form.is_valid(): # Django valida los datos por nosotros
+            # El formulario es válido. PERO no lo guardes todavía.
+            task = form.save(commit=False) # commit=False nos da el objeto sin guardarlo en BD
+
+            # --- AQUÍ LA CLAVE ---
+            # Asignamos el proyecto manualmente
+            task.project = project 
+
+            # Ahora sí, guardamos el objeto completo en la BD
+            task.save()
+
+            # Redirigimos al usuario de vuelta a la lista de tareas de ese proyecto
+            return redirect('tasks:project-detail', pk=project.pk)
+
+    # Si no es POST, es un GET, así que solo mostramos un formulario vacío
+    else:
+        form = TaskForm()
+
+    # Preparamos el contexto para la plantilla
+    context = {
+        'form': form,
+        'project': project
+    }
+    return render(request, 'tasks/task_form.html', context)
