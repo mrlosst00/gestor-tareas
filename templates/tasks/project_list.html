@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Lista de Proyectos{% endblock %}
+
+{% block content %}
+  <h1>Lista de Proyectos</h1>
+  <hr>
+  <div class="row">
+    {% for project in projects %}
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ project.name }}</h5>
+            <p class="card-text">{{ project.description|truncatewords:10 }}</p>
+            <a href="{% url 'tasks:project-detail' project.pk %}" class="btn btn-primary">Ver Tareas</a>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p>No hay proyectos creados.</p>
+    {% endfor %}
+  </div>
+{% endblock %}
